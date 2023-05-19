@@ -1,0 +1,15 @@
+app.post('/restaurant/search', (req, res) => {
+  const { city, couponCode } = req.body;
+  let filteredRestaurants = restaurants.filter(r => r.city === city);
+
+  if (couponCode) {
+    filteredRestaurants = filteredRestaurants.map(restaurant => {
+      const filteredMenuItems = restaurant.menuItems.filter(item =>
+        item.couponCodes && item.couponCodes.includes(couponCode)
+      );
+      return { ...restaurant, menuItems: filteredMenuItems };
+    });
+  }
+
+  res.json(filteredRestaurants);
+});
